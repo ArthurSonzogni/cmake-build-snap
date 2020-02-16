@@ -25,7 +25,7 @@ passthrough:
   license: BSD-3-Clause
 
 grade: stable
-confinement: strict
+confinement: classic
 base: core18
 
 apps:
