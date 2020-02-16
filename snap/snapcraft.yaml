@@ -41,12 +41,11 @@ parts:
     plugin: make
     override-build: |
       ${SNAPCRAFT_PART_SRC}/bootstrap \
-        --parallel=${SNAPCRAFT_PARALLEL_BUILD_COUNT} \
         -- \
         -DCMAKE_BUILD_TYPE=Release \
         -DBUILD_TESTING=OFF \
         -DCMAKE_INSTALL_PREFIX=${SNAPCRAFT_PART_INSTALL}
-      make -j ${SNAPCRAFT_PARALLEL_BUILD_COUNT}
+      make
       make install
     build-packages:
       - build-essential
