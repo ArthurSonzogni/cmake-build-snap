@@ -1,0 +1,58 @@
+name: cmake-build-snaps
+version: '3.17'
+summary: The latest cmake version for every architectures for build-snaps.
+description: |
+  Unofficial snap for cmake. This one is available for every architecture and
+  only provide the latest version. The goal is for this to be available as a
+  part's build-snaps.
+
+  ~~~
+  CMake is an open-source, cross-platform family of tools designed
+  to build, test and package software. CMake is used to control the
+  software compilation process using simple platform and compiler
+  independent configuration files, and generate native makefiles
+  and workspaces that can be used in the compiler environment of
+  your choice.
+  This snap is maintained separately from the CMake project by one
+  of the CMake co-maintainers. Visit https://crascit.com for additional
+  CMake resources, including the book Professional CMake: A Practical Guide
+  and various blog articles.
+  The latest cmake version for every architectures for build-snaps.
+  ~~~
+
+passthrough:
+  title: cmake-build-snaps
+  license: BSD-3-Clause
+
+grade: stable
+confinement: strict
+base: core18
+
+apps:
+  cmake:
+    command: cmake
+
+parts:
+  cmake:
+    source: "https://gitlab.kitware.com/cmake/cmake.git"
+    source-depth: 1
+    source-branch: master
+    source-type: git
+    plugin: make
+    override-build: |
+      ${SNAPCRAFT_PART_SRC}/bootstrap \
+        --parallel=${SNAPCRAFT_PARALLEL_BUILD_COUNT} \
+        -- \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_TESTING=OFF \
+        -DCMAKE_INSTALL_PREFIX=${SNAPCRAFT_PART_INSTALL}
+      make -j ${SNAPCRAFT_PARALLEL_BUILD_COUNT}
+      make install
+    build-packages:
+      - build-essential
+      - libssl-dev
+      - libncurses5-dev
+    stage-packages:
+      - libssl1.1
+      - libncurses5
+      - libtinfo5
